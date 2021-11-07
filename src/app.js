@@ -19,7 +19,7 @@ app.use(express.urlencoded({
     extended: false
 }))
 //rutas
-app.use('./auth',authRoutes)
+app.use('/auth',authRoutes)
 
 //inicio del servidor
 app.listen(app.get('port'),()=>{
