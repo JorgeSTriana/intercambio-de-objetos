@@ -6,11 +6,12 @@ const Authorized = (req, res, next)=>{
         res.status(403).json('unauthorized')
     }
     try {
-        const decode = jwt.verify(token, procces.env.JWT_SECRET)
+        const decoded = jwt.verify(token, procces.env.JWT_SECRET)
         req.user = decoded
         next()
     } catch (error) {
-        res.status(405).json({msg: 'Invalid token'})
+        //res.status(405).json({msg: 'Invalid token'})
+        res.sen(error)
     }
 }
 
