@@ -1,0 +1,14 @@
+{
+    
+    "name": "Backend Swobjects",
+    "version": "0.0.1",  
+    "description": "Documentación en linea de los endpoints del backend",
+    "apidoc": {
+        "title": "Documentación API Swobjects",
+        "url": "https://swobject.herokuapp.com/documentation",
+        "header": {
+            "title": "Resume",
+            "filename": "header.md"
+        }
+    }
+}
