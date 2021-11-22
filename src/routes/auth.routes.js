@@ -1,8 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const msg = require('../helpers/messages')
+/* const msg = require('../helpers/messages')
 const User = require('../models/user')
-const authService = require('../services/auth.service')
+const authService = require('../services/auth.service') */
+const authController = require('../controllerrs/authController')
+const { check } = require('express-validator')
+const { profile } = require('../controllers/auth.controller')
 
 /**
  * @api {get} /profile Perfil del usuario
@@ -11,17 +14,7 @@ const authService = require('../services/auth.service')
  * @apiGroup Data
  */
 
-router.get('/profile', async (req, res)=>{
-    try {
-        const user = new User(req.body)
-        // let token = await authService.register(user)
-        // res.status(200).json({"token": token})
-        res.send("bien")
-    } catch (error) {
-        res.send(error)
-        // res.status(500).json({'error':error})
-    }
-})
+router.get('/profile', authController/profile)
 
 /**
  * @api {post} /auth/register Registro de usuarios
@@ -93,16 +86,14 @@ router.get('/profile', async (req, res)=>{
  *  }
  * */
 
-router.post('/register', async (req, res)=>{
-    try {
-        const user = new User(req.body)
-        const token = await authService.register(user)
-        res.status(200).json({"token": token})
-    } catch (error) {
-        //res.status(500).json({error})
-        res.send(error)
-    }
-})
+router.post('/register',[
+    check( 'name', 'Nombre no valido, minimo 2 caracteres, máximo 40 caracteres').isLength({min: 2, max: 40}),    
+    check('email', 'Email no valido').isEmail(),
+    check('password', 'Contraseña debil')/* .isStrongPassword() */
+],
+//aqui va la funcion desde authController
+authController.register
+)
 
 /**
  * @api {post} /auth/login Ingreso de usuarios
@@ -114,18 +105,6 @@ router.post('/register', async (req, res)=>{
  * @apiSampleRequest https://swobject.herokuapp.com/auth/login
  * */
 
-router.post('/login', async (req, res)=>{
-    try {
-        const {email, password} = req.body
-        if(!email || !password){
-            res.status(400).json(msg.fieldsRequired)
-        }
-        const token = await authService.login(req.body)
-        res.status(token.code).json({"token": token})
-    } catch (error) {
-        //res.send(error)
-        res.status(500).json({'error': error})
-    }
-})
+router.post('/login', authController.login)
 
 module.exports = router
